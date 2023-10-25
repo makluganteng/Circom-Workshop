@@ -1,7 +1,7 @@
 #!/bin/bash
 
-PHASE1=./pot12_final.ptau
-BUILD_DIR=./build/proof_of_age
+PHASE1=../circuit/pot12_final.ptau
+BUILD_DIR=../build/proof_of_age
 CIRCUIT_NAME=proof_of_age
 
 if [ -f "$PHASE1" ]; then
@@ -52,5 +52,11 @@ echo "DONE ($((end-start))s)"
 echo "****VERIFYING PROOF FOR SAMPLE INPUT****"
 start=`date +%s`
 npx snarkjs groth16 verify "$BUILD_DIR"/vkey.json "$BUILD_DIR"/public.json "$BUILD_DIR"/proof.json
+end=`date +%s`
+echo "DONE ($((end-start))s)"
+
+echo "****EXPORTING VERIFIER CONTRACT****"
+start=`date +%s`
+npx snarkjs zkey export solidityverifier "$BUILD_DIR"/"$CIRCUIT_NAME".zkey verifier.sol
 end=`date +%s`
 echo "DONE ($((end-start))s)"
